@@ -6,13 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import com.example.androidcomponents.model.EmployeeModel
-import com.example.androidcomponents.model.EmployeeInterface
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
 
     private lateinit var etEmployeeID: EditText
     private lateinit var etEmployeeName: EditText
@@ -55,10 +51,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    public interface EmployeeInterface {
-        fun employeeData(employeeModel: EmployeeModel)
-    }
-
     private val submitClickListener = View.OnClickListener { view ->
         var employeeID: Int = 0
         var employeeName: String = "No name"
@@ -75,16 +67,17 @@ class MainActivity : AppCompatActivity() {
                     employeeSalary = (etEmployeeSalary.text.toString()).toDouble()
                 }
 
-                EmployeeModel(employeeID, employeeName, employeeSalary)
-
-                val intent: Intent = Intent(this@MainActivity, EmpDetailsActivity::class.java)
+                /*
+                //Primitive type
                 val bundle: Bundle = Bundle()
-
                 bundle.putInt("employeeID", employeeID)
                 bundle.putString("employeeName", employeeName)
                 bundle.putDouble("employeeSalary", employeeSalary)
+                intent.putExtras(bundle)*/
 
-                intent.putExtras(bundle)
+                val employeeModel: EmployeeModel = EmployeeModel(employeeID, employeeName, employeeSalary)
+                val intent: Intent = Intent(this@MainActivity, EmpDetailsActivity::class.java)
+                intent.putExtra("EMPLOYEESMODEL", employeeModel)
                 startActivity(intent)
 
             }
