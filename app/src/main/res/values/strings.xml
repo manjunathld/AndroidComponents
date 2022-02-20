@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AndroidComponents</string>
+    <string name="enter_employee_id">Enter employee ID</string>
+    <string name="enter_employee_name">Enter Employee Name</string>
+    <string name="enter_employee_salary">Enter Employee Salary</string>
+    <string name="employee_details">Employee Details</string>
+    <string name="submit">Submit</string>
 </resources>
