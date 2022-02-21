@@ -29,6 +29,10 @@ class MainActivity() : AppCompatActivity() {
 
         bvSubmit.setOnClickListener(submitClickListener)
 
+        //Starting Background Service
+        val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
+        startService(backgroundService)
+
     }
 
     override fun onStart() {
