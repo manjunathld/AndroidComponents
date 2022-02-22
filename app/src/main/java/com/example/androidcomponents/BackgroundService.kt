@@ -14,11 +14,16 @@ class BackgroundService : Service() {
         super.onCreate()
     }
 
+    override fun onStart(intent: Intent?, startId: Int) {
+        super.onStart(intent, startId)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         Thread (
             Runnable {
                 while (true) {
+                    //Toast.makeText(applicationContext, "New Thread Service", Toast.LENGTH_SHORT).show()
                     Log.d("Service", "New Thread Service, ${Thread.currentThread()}")
                     Thread.sleep(3000)
                 }

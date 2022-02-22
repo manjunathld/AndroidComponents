@@ -33,6 +33,10 @@ class MainActivity() : AppCompatActivity() {
         val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
         startService(backgroundService)
 
+        //Starting Foreground Service
+        val foregroundService: Intent = Intent(this@MainActivity, ForegroundService::class.java)
+        startForegroundService(foregroundService)
+
     }
 
     override fun onStart() {
@@ -81,7 +85,9 @@ class MainActivity() : AppCompatActivity() {
 
                 val employeeModel: EmployeeModel = EmployeeModel(employeeID, employeeName, employeeSalary)
                 val intent: Intent = Intent(this@MainActivity, EmpDetailsActivity::class.java)
-                intent.putExtra("EMPLOYEESMODEL", employeeModel)
+                val bundle: Bundle = Bundle()
+                bundle.putParcelable("EMPLOYEESMODEL", employeeModel)
+                intent.putExtras(bundle)
                 startActivity(intent)
 
             }
