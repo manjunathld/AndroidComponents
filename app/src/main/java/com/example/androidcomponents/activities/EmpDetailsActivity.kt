@@ -1,8 +1,9 @@
-package com.example.androidcomponents
+package com.example.androidcomponents.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.example.androidcomponents.R
 import com.example.androidcomponents.model.EmployeeModel
 
 class EmpDetailsActivity : AppCompatActivity() {

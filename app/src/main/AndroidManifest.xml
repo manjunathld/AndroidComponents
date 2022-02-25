@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidComponents">
         <activity
-            android:name=".EmpDetailsActivity"
+            android:name=".activities.EmpDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -26,8 +26,12 @@
         </activity>
         <!-->Background Service<!-->
         <service
-            android:name=".BackgroundService"
-            android:exported="true"> </service>
+            android:name=".services.BackgroundService"
+            android:exported="true"/>
+        <!-->Foreground Service<!-->
+        <service
+            android:exported="true"
+            android:name=".services.ForegroundService"/>
     </application>
 
 </manifest>

@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import com.example.androidcomponents.activities.EmpDetailsActivity
 import com.example.androidcomponents.model.EmployeeModel
+import com.example.androidcomponents.services.BackgroundService
+import com.example.androidcomponents.services.ForegroundService
 
 class MainActivity() : AppCompatActivity() {
 
@@ -30,8 +33,8 @@ class MainActivity() : AppCompatActivity() {
         bvSubmit.setOnClickListener(submitClickListener)
 
         //Starting Background Service
-        val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
-        startService(backgroundService)
+        //val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
+        //startService(backgroundService)
 
         //Starting Foreground Service
         val foregroundService: Intent = Intent(this@MainActivity, ForegroundService::class.java)
