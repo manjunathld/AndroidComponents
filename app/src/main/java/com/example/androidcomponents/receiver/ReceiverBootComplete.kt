@@ -8,8 +8,8 @@ import com.example.androidcomponents.services.ForegroundService
 class ReceiverBootComplete : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent!!.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-            val intentForegroundService: Intent = Intent(context, ForegroundService::class.java)
-            context!!.startForegroundService(intentForegroundService)
+            //val intentForegroundService: Intent = Intent(context, ForegroundService::class.java)
+            //context!!.startForegroundService(intentForegroundService)
         }
     }
 }

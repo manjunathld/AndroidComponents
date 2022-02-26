@@ -1,10 +1,13 @@
 package com.example.androidcomponents
 
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,6 +15,7 @@ import android.widget.Toast
 import com.example.androidcomponents.activities.EmpDetailsActivity
 import com.example.androidcomponents.model.EmployeeModel
 import com.example.androidcomponents.services.BackgroundService
+import com.example.androidcomponents.services.BoundService
 import com.example.androidcomponents.services.ForegroundService
 
 class MainActivity() : AppCompatActivity() {
@@ -20,6 +24,7 @@ class MainActivity() : AppCompatActivity() {
     private lateinit var etEmployeeName: EditText
     private lateinit var etEmployeeSalary: EditText
     private lateinit var bvSubmit: Button
+    private var isServiceBound: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,19 +40,24 @@ class MainActivity() : AppCompatActivity() {
 
         bvSubmit.setOnClickListener(submitClickListener)
 
-        //Starting Background Service
-        //val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
-        //startService(backgroundService)
+        /*//Starting Background Service
+        val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
+        startService(backgroundService)*/
 
-        //Starting Foreground Service
+        /*//Starting Foreground Service
         if (!isForegroundServiceRunning()) {
             val foregroundService: Intent = Intent(this@MainActivity, ForegroundService::class.java)
             startForegroundService(foregroundService)
             Toast.makeText(this, "Foreground Service is stating...", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Service is already started...", Toast.LENGTH_SHORT).show()
-        }
+        }*/
 
+        //Bounded Service
+        if (!isServiceBound) {
+            val boundedServiceIntent = Intent(this@MainActivity, BoundService::class.java)
+            bindService(boundedServiceIntent, serviceCreation, BIND_AUTO_CREATE)
+        }
 
     }
 
@@ -68,6 +78,9 @@ class MainActivity() : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        if (isServiceBound) {
+            unbindService(serviceCreation)
+        }
         super.onDestroy()
     }
 
@@ -118,4 +131,13 @@ class MainActivity() : AppCompatActivity() {
         return false
     }
 
+    private val serviceCreation = object : ServiceConnection {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+            isServiceBound = true
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            isServiceBound = false
+        }
+    }
 }
