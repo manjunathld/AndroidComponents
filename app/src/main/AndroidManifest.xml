@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.androidcomponents">
 
-    <!-->Permission for Foreground Service<!-->
+    <!-->Foreground Service<!-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-->Boot complete receiver</!-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -30,8 +32,18 @@
             android:exported="true"/>
         <!-->Foreground Service<!-->
         <service
-            android:exported="true"
-            android:name=".services.ForegroundService"/>
+            android:name=".services.ForegroundService"
+            android:exported="true"/>
+        <!-->Receive Boot Complete</!-->
+        <receiver
+            android:name=".receiver.ReceiverBootComplete"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.BOOT_COMPLETED">
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
