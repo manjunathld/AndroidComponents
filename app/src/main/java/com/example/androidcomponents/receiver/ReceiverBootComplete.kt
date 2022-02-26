@@ -3,7 +3,6 @@ package com.example.androidcomponents.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.androidcomponents.services.ForegroundService
 
 class ReceiverBootComplete : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

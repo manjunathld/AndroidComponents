@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.androidcomponents">
 
+    <!-->Check the network connectivity</-->
+
+
     <!-->Foreground Service<!-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!-->Boot complete receiver</!-->
@@ -26,15 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-->Background Service<!-->
+        <!-->Background Service<-->
         <service
             android:name=".services.BackgroundService"
             android:exported="true"/>
-        <!-->Foreground Service<!-->
+        <!-->Foreground Service<-->
         <service
             android:name=".services.ForegroundService"
             android:exported="true"/>
-        <!-->Receive Boot Complete</!-->
+        <!-->Receive Boot Complete</-->
         <receiver
             android:name=".receiver.ReceiverBootComplete"
             android:exported="true">
@@ -44,11 +47,24 @@
                 </action>
             </intent-filter>
         </receiver>
-        <!-->Bounded Service<!-->
+        <!-->Bounded Service<-->
         <service
             android:name=".services.BoundService"
             android:exported="true">
         </service>
+        <!-->Network Connection Broadcast Receiver</-->
+        <receiver
+            android:name=".receiver.ReceiverPowerConnectivity"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.ACTION_POWER_CONNECTED">
+                </action>
+                <action
+                    android:name="android.intent.action.ACTION_POWER_DISCONNECTED">
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
