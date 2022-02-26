@@ -71,7 +71,7 @@ class ForegroundService : Service() {
             NotificationManager.IMPORTANCE_HIGH
         )
 
-        val notificationManagerService = getSystemService(NotificationManager::class.java)
+        val notificationManagerService = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManagerService.createNotificationChannel(notificationChannel)
     }
 

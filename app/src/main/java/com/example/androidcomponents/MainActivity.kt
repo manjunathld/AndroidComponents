@@ -1,11 +1,14 @@
 package com.example.androidcomponents
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.example.androidcomponents.activities.EmpDetailsActivity
 import com.example.androidcomponents.model.EmployeeModel
 import com.example.androidcomponents.services.BackgroundService
@@ -37,8 +40,14 @@ class MainActivity() : AppCompatActivity() {
         //startService(backgroundService)
 
         //Starting Foreground Service
-        val foregroundService: Intent = Intent(this@MainActivity, ForegroundService::class.java)
-        startForegroundService(foregroundService)
+        if (!isForegroundServiceRunning()) {
+            val foregroundService: Intent = Intent(this@MainActivity, ForegroundService::class.java)
+            startForegroundService(foregroundService)
+            Toast.makeText(this, "Foreground Service is stating...", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Service is already started...", Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 
@@ -96,6 +105,17 @@ class MainActivity() : AppCompatActivity() {
             }
             else -> {}
         }
+    }
+
+    private fun isForegroundServiceRunning(): Boolean {
+        val activityManager: ActivityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
+            if (ForegroundService::class.java.name.equals(service.service.className)) {
+                return true
+            }
+        }
+
+        return false
     }
 
 }
