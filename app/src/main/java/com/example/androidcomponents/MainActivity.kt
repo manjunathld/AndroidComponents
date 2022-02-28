@@ -8,13 +8,14 @@ import android.os.IBinder
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.example.androidcomponents.activities.EmpDetailsActivity
 import com.example.androidcomponents.model.EmployeeModel
 import com.example.androidcomponents.receiver.ReceiverPowerConnectivity
-import com.example.androidcomponents.services.BackgroundService
-import com.example.androidcomponents.services.BoundService
 import com.example.androidcomponents.services.ForegroundService
+import android.content.Intent
+
+
+
 
 class MainActivity() : AppCompatActivity() {
 
@@ -22,7 +23,9 @@ class MainActivity() : AppCompatActivity() {
     private lateinit var etEmployeeName: EditText
     private lateinit var etEmployeeSalary: EditText
     private lateinit var bvSubmit: Button
+    private lateinit var bvSendBroadcastMessage: Button
     private var isServiceBound: Boolean = false
+
     private lateinit var receiverPowerConnectivity: ReceiverPowerConnectivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +39,10 @@ class MainActivity() : AppCompatActivity() {
         etEmployeeName = findViewById(R.id.et_employee_name)
         etEmployeeSalary = findViewById(R.id.et_employee_salary)
         bvSubmit = findViewById(R.id.bv_submit)
+        bvSendBroadcastMessage = findViewById(R.id.bv_send_broadcast_message)
 
         bvSubmit.setOnClickListener(submitClickListener)
+        bvSendBroadcastMessage.setOnClickListener(submitClickListener)
 
         /*//Starting Background Service
         val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
@@ -71,6 +76,7 @@ class MainActivity() : AppCompatActivity() {
         intentFilter.addAction(Intent.ACTION_POWER_CONNECTED)
         intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
         registerReceiver(receiverPowerConnectivity, intentFilter)
+
     }
 
     override fun onPause() {
@@ -120,6 +126,12 @@ class MainActivity() : AppCompatActivity() {
                 intent.putExtras(bundle)
                 startActivity(intent)
 
+            }
+            R.id.bv_send_broadcast_message -> {
+                //Broadcasting custom intent message
+                val customIntent = Intent()
+                customIntent.action = "com.example.androidcomponents"
+                sendBroadcast(intent)
             }
             else -> {}
         }

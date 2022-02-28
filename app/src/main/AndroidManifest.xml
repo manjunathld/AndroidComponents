@@ -37,7 +37,7 @@
         <service
             android:name=".services.ForegroundService"
             android:exported="true"/>
-        <!-->Receive Boot Complete</-->
+        <!-->Receive Boot Complete<-->
         <receiver
             android:name=".receiver.ReceiverBootComplete"
             android:exported="true">
@@ -52,18 +52,10 @@
             android:name=".services.BoundService"
             android:exported="true">
         </service>
-        <!-->Network Connection Broadcast Receiver</-->
+        <!-->Network Connection Broadcast Receiver<-->
         <receiver
             android:name=".receiver.ReceiverPowerConnectivity"
             android:exported="true">
-            <intent-filter>
-                <action
-                    android:name="android.intent.action.ACTION_POWER_CONNECTED">
-                </action>
-                <action
-                    android:name="android.intent.action.ACTION_POWER_DISCONNECTED">
-                </action>
-            </intent-filter>
         </receiver>
     </application>
 
