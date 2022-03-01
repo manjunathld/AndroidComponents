@@ -2,14 +2,14 @@
 
 **Main Components**
 1. Activities
-2. Intents
-3. Services
-4. Broadcast Receivers
-5. Content Providers
+2. Services
+3. Broadcast Receivers
+4. Content Providers
 
 **Additional Components**
 1. Manifest
-2. Fragments
-3. Resources
-4. View
-5. Layout
+2. Intents
+3. Fragments
+4. Resources
+5. View
+6. Layout
