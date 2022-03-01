@@ -60,6 +60,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/bv_getContacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_contacts"
+        app:layout_constraintBottom_toTopOf="@+id/bv_send_broadcast_message"
+        app:layout_constraintEnd_toEndOf="@+id/bv_send_broadcast_message"
+        app:layout_constraintStart_toStartOf="@+id/bv_send_broadcast_message" />
+
+    <Button
         android:id="@+id/bv_send_broadcast_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

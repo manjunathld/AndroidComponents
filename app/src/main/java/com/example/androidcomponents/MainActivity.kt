@@ -1,5 +1,7 @@
 package com.example.androidcomponents
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.*
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +15,14 @@ import com.example.androidcomponents.model.EmployeeModel
 import com.example.androidcomponents.receiver.ReceiverPowerConnectivity
 import com.example.androidcomponents.services.ForegroundService
 import android.content.Intent
-
-
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
+import android.provider.ContactsContract
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import java.net.URI
 
 
 class MainActivity() : AppCompatActivity() {
@@ -24,6 +32,8 @@ class MainActivity() : AppCompatActivity() {
     private lateinit var etEmployeeSalary: EditText
     private lateinit var bvSubmit: Button
     private lateinit var bvSendBroadcastMessage: Button
+    private lateinit var bvGetContacts: Button
+
     private var isServiceBound: Boolean = false
 
     private lateinit var receiverPowerConnectivity: ReceiverPowerConnectivity
@@ -40,9 +50,11 @@ class MainActivity() : AppCompatActivity() {
         etEmployeeSalary = findViewById(R.id.et_employee_salary)
         bvSubmit = findViewById(R.id.bv_submit)
         bvSendBroadcastMessage = findViewById(R.id.bv_send_broadcast_message)
+        bvGetContacts = findViewById(R.id.bv_getContacts)
 
         bvSubmit.setOnClickListener(submitClickListener)
         bvSendBroadcastMessage.setOnClickListener(submitClickListener)
+        bvGetContacts.setOnClickListener(submitClickListener)
 
         /*//Starting Background Service
         val backgroundService: Intent = Intent(this@MainActivity, BackgroundService::class.java)
@@ -95,46 +107,57 @@ class MainActivity() : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private val submitClickListener = View.OnClickListener { view ->
-        var employeeID: Int = 0
-        var employeeName: String = "No name"
-        var employeeSalary: Double = 0.0
-        when (view.id) {
-            R.id.bv_submit -> {
-                if (etEmployeeID.text.isNotEmpty()) {
-                    employeeID = (etEmployeeID.text.toString()).toInt()
-                }
-                if (etEmployeeName.text.isNotEmpty()) {
-                    employeeName = (etEmployeeName.text.toString())
-                }
-                if (etEmployeeSalary.text.isNotEmpty()) {
-                    employeeSalary = (etEmployeeSalary.text.toString()).toDouble()
-                }
+    private val submitClickListener: View.OnClickListener = object : View.OnClickListener {
+        override fun onClick(view: View?) {
+            var employeeID: Int = 0
+            var employeeName: String = "No name"
+            var employeeSalary: Double = 0.0
+            when (view!!.id) {
+                R.id.bv_submit -> {
+                    if (etEmployeeID.text.isNotEmpty()) {
+                        employeeID = (etEmployeeID.text.toString()).toInt()
+                    }
+                    if (etEmployeeName.text.isNotEmpty()) {
+                        employeeName = (etEmployeeName.text.toString())
+                    }
+                    if (etEmployeeSalary.text.isNotEmpty()) {
+                        employeeSalary = (etEmployeeSalary.text.toString()).toDouble()
+                    }
 
-                /*
-                //Primitive type
-                val bundle: Bundle = Bundle()
-                bundle.putInt("employeeID", employeeID)
-                bundle.putString("employeeName", employeeName)
-                bundle.putDouble("employeeSalary", employeeSalary)
-                intent.putExtras(bundle)*/
+                    /*
+                    //Primitive type
+                    val bundle: Bundle = Bundle()
+                    bundle.putInt("employeeID", employeeID)
+                    bundle.putString("employeeName", employeeName)
+                    bundle.putDouble("employeeSalary", employeeSalary)
+                    intent.putExtras(bundle)*/
 
-                val employeeModel: EmployeeModel = EmployeeModel(employeeID, employeeName, employeeSalary)
-                val intent: Intent = Intent(this@MainActivity, EmpDetailsActivity::class.java)
-                val bundle: Bundle = Bundle()
-                bundle.putParcelable("EMPLOYEESMODEL", employeeModel)
-                intent.putExtras(bundle)
-                startActivity(intent)
+                    val employeeModel: EmployeeModel = EmployeeModel(employeeID, employeeName, employeeSalary)
+                    val intent: Intent = Intent(this@MainActivity, EmpDetailsActivity::class.java)
+                    val bundle: Bundle = Bundle()
+                    bundle.putParcelable("EMPLOYEESMODEL", employeeModel)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
 
+                }
+                R.id.bv_send_broadcast_message -> {
+                    //Broadcasting custom intent message
+                    val customIntent = Intent()
+                    customIntent.action = "com.example.androidcomponents"
+                    sendBroadcast(intent)
+                }
+                R.id.bv_getContacts -> {
+                    //ContentResolver
+                    if (checkContactReadPermission()) {
+                        getContacts()
+                    } else {
+                        requestContactReadPermission()
+                    }
+                }
+                else -> {}
             }
-            R.id.bv_send_broadcast_message -> {
-                //Broadcasting custom intent message
-                val customIntent = Intent()
-                customIntent.action = "com.example.androidcomponents"
-                sendBroadcast(intent)
-            }
-            else -> {}
         }
+
     }
 
     private fun isForegroundServiceRunning(): Boolean {
@@ -156,5 +179,35 @@ class MainActivity() : AppCompatActivity() {
         override fun onServiceDisconnected(p0: ComponentName?) {
             isServiceBound = false
         }
+    }
+
+    @SuppressLint("Range")
+    private fun getContacts() {
+        val contentResolver: ContentResolver = contentResolver
+        val contactURI: Uri? = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        val cursor: Cursor? = contentResolver.query(contactURI!!, null,null,null, null)
+
+        if (cursor != null && cursor.count > 0) {
+            Log.e("Contacts", "Total contacts: ${cursor.count}")
+            val columnDisplayName: Int = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            while (cursor.moveToNext()) {
+                val contactName: String = cursor.getString(columnDisplayName)
+                Log.e("Contacts", "Name: $contactName")
+            }
+        } else {
+            Log.e("Contacts", "No contacts found")
+        }
+    }
+
+    private fun checkContactReadPermission(): Boolean {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    private fun requestContactReadPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 0)
     }
 }
